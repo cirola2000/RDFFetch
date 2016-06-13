@@ -11,11 +11,14 @@ var format = require('./model/format');
 var repository = require('./model/repository');
 var dataset = require('./model/dataset');
 var resource = require('./model/resource');
+var datasetDetail = require('./model/datasetDetails');
+// var normalized = require('./model/normalized');
 
 // var routes = require('./routes/index');
 var routeFormat = require('./routes/format');
 var routeRepository = require('./routes/repository');
 var routeCKAN = require('./routes/ckan');
+var routeDataset = require('./routes/dataset');
 
 var app = express();
 
@@ -30,6 +33,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static('model/normalized.js'));
 
 
 
@@ -37,6 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/format', routeFormat);
 app.use('/repository', routeRepository);
 app.use('/ckan', routeCKAN);
+app.use('/dataset', routeDataset);
 
 
 // catch 404 and forward to error handler
