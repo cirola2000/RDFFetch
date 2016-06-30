@@ -33,7 +33,7 @@ router.get('/update', function (req, res, next) {
         // if the API url is different of the URL (this should be manually checked)
         if (typeof element.APIURL !== "undefined") {
           element.url = element.APIURL;
-          element.url.original = element.APIURL;
+          element.original = element.APIURL;
         }
 
         if (element.url.slice(-1) != "/") {
@@ -153,7 +153,7 @@ function saveDatasetAndResources(dataset, callback) {
       if (typeof resources == 'undefined')
         resources = JSON.parse(r.body).result[0].resources;
 
-      resources.forEach(function (res) {
+        resources.forEach(function (res) {
 
         res.repositoryID = dataset.repositoryID;
         res.repository = dataset.repository;
