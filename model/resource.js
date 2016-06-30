@@ -14,7 +14,7 @@ var resourceSchema = new mongoose.Schema({
   normalizedFormat: { type: String, index: true },
   repositoryID: { type: String, index: true },
   error: String
-});
+}, {strict:false});
 
 mongoose.model('Resource', resourceSchema);
 
