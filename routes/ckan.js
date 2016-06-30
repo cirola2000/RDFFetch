@@ -57,6 +57,7 @@ router.get('/update', function (req, res, next) {
               for (var i in datasets) {
                 var dataset = {
                   repository: element.url + "api/3/action/",
+                  repositoryID: element.url,
                   datasetID: datasets[i]
                 }
                  
@@ -150,10 +151,11 @@ function saveDatasetAndResources(dataset, callback) {
 
       resources.forEach(function (res) {
 
-        console.log("Saving resource: " + res.name);
-
         res.repositoryID = dataset.repository;
         res.datasetID = dataset.datasetID;
+        
+        console.log("Saving resource: " + res.name + " from dataset " + res.datasetID);
+
 
         saveResource(res);
         
