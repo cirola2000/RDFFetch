@@ -33,7 +33,7 @@ router.get('/update', function (req, res, next) {
         // if the API url is different of the URL (this should be manually checked)
         if (typeof element.APIURL !== "undefined") {
           element.url = element.APIURL;
-          element.original = element.APIURL;
+          element.original = element.url;
         }
 
         if (element.url.slice(-1) != "/") {
