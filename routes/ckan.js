@@ -114,7 +114,7 @@ function saveDatasetAndResources(dataset, callback) {
   console.log("Repository: " + dataset.repository);
   
   // saving the dataset
-  saveDataset({ datasetID: dataset.datasetID, repository: dataset.repository });
+  saveDataset({ datasetID: dataset.datasetID, repository: dataset.repository, repositoryID: dataset.repositoryID });
   
   // var Dataset = mongoose.model("Dataset");
   // var dataset = new Dataset({ datasetID: dataset.datasetID, repository: dataset.repository });
