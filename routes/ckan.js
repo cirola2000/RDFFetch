@@ -33,10 +33,14 @@ router.get('/update', function (req, res, next) {
         // if the API url is different of the URL (this should be manually checked)
         if (typeof element.APIURL !== "undefined") {
           element.url = element.APIURL;
+          element.url.original = element.APIURL;
         }
 
-        if (element.url.slice(-1) != "/")
+        if (element.url.slice(-1) != "/") {
+          element.original = element.url;
           element.url = element.url + '/';
+
+        }
 
         var repositoryDatasetListURL = element.url + "api/3/action/" + dataset_list_url;
           
@@ -57,7 +61,7 @@ router.get('/update', function (req, res, next) {
               for (var i in datasets) {
                 var dataset = {
                   repository: element.url + "api/3/action/",
-                  repositoryID: element.url,
+                  repositoryID: element.original,
                   datasetID: datasets[i]
                 }
                  
@@ -151,9 +155,10 @@ function saveDatasetAndResources(dataset, callback) {
 
       resources.forEach(function (res) {
 
-        res.repositoryID = dataset.repository;
+        res.repositoryID = dataset.repositoryID;
+        res.repository = dataset.repository;
         res.datasetID = dataset.datasetID;
-        
+
         console.log("Saving resource: " + res.name + " from dataset " + res.datasetID);
 
 
@@ -206,7 +211,7 @@ function saveDataset(d) {
   mongoose.model("Dataset").find({ datasetID: d.datasetID }, function (err, docs) {
     if (docs == "") {
       var Dataset = mongoose.model("Dataset");
-      var dataset = new Dataset({ datasetID: d.datasetID, repository: d.repository , repositoryID: d.repositoryID });
+      var dataset = new Dataset({ datasetID: d.datasetID, repository: d.repository, repositoryID: d.repositoryID });
       dataset.save();
     }
   })
