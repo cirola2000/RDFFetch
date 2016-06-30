@@ -29,15 +29,14 @@ router.get('/update', function (req, res, next) {
       
         
         // var repositoryDatasetListURL = repositories[repository] + dataset_list_url + "?limit=1";
+          element.original = element.url;
         
         // if the API url is different of the URL (this should be manually checked)
         if (typeof element.APIURL !== "undefined") {
           element.url = element.APIURL;
-          element.original = element.url;
         }
 
         if (element.url.slice(-1) != "/") {
-          element.original = element.url;
           element.url = element.url + '/';
 
         }
