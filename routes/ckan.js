@@ -206,7 +206,7 @@ function saveDataset(d) {
   mongoose.model("Dataset").find({ datasetID: d.datasetID }, function (err, docs) {
     if (docs == "") {
       var Dataset = mongoose.model("Dataset");
-      var dataset = new Dataset({ datasetID: d.datasetID, repository: d.repository });
+      var dataset = new Dataset({ datasetID: d.datasetID, repository: d.repository , repositoryID: d.repositoryID });
       dataset.save();
     }
   })
