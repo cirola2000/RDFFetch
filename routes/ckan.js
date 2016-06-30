@@ -153,6 +153,7 @@ function saveDatasetAndResources(dataset, callback) {
         console.log("Saving resource: " + res.name);
 
         res.repositoryID = dataset.repository;
+        res.datasetID = dataset.datasetID;
 
         saveResource(res);
         

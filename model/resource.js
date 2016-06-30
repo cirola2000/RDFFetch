@@ -10,6 +10,7 @@ var resourceSchema = new mongoose.Schema({
   mimetype: String,
   created: String,
   format: { type: String, index: true },
+  datasetID: { type: String, index: true },
   normalizedFormat: { type: String, index: true },
   repositoryID: { type: String, index: true },
   error: String
