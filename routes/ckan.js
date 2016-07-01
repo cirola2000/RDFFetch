@@ -12,7 +12,7 @@ var dataset_list_url = "package_list";
 var get_dataset_url = "package_show"
 
 // create a queue and set the max the amount of concurrent ajax request to 20
-var queue = async.queue(saveDatasetAndResources, 25);
+var queue = async.queue(saveDatasetAndResources, 15);
 
 
 /* GET resources. */
