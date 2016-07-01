@@ -12,6 +12,7 @@ var resourceSchema = new mongoose.Schema({
   format: { type: String, index: true },
   datasetID: { type: String, index: true },
   normalizedFormat: { type: String, index: true },
+  repository: { type: String, index: true },
   repositoryID: { type: String, index: true },
   error: String
 }, {strict:false});

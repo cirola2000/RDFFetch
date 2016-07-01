@@ -50,6 +50,7 @@ router.get('/update', function (req, res, next) {
     
       // object with name, id and link of the repository
       var rep = {};
+      rep.active = true;
 
       // if (ctrl < 1) {
       for (var c in child.children) {

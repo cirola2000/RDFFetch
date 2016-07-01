@@ -12,7 +12,7 @@ var dataset_list_url = "package_list";
 var get_dataset_url = "package_show"
 
 // create a queue and set the max the amount of concurrent ajax request to 20
-var queue = async.queue(saveDatasetAndResources, 15);
+var queue = async.queue(saveDatasetAndResources, 5);
 
 
 /* GET resources. */
@@ -25,60 +25,60 @@ router.get('/update', function (req, res, next) {
     // iterate over all CKAN repositories
     if (mongoRepositories != "")
       mongoRepositories.forEach(function (element) {
+
+        if (element.active == true) {
         
-      
-        
-        // var repositoryDatasetListURL = repositories[repository] + dataset_list_url + "?limit=1";
+          // var repositoryDatasetListURL = repositories[repository] + dataset_list_url + "?limit=1";
           element.original = element.url;
         
-        // if the API url is different of the URL (this should be manually checked)
-        if (typeof element.APIURL !== "undefined") {
-          element.url = element.APIURL;
-        }
+          // if the API url is different of the URL (this should be manually checked)
+          if (typeof element.APIURL !== "undefined") {
+            element.url = element.APIURL;
+          }
 
-        if (element.url.slice(-1) != "/") {
-          element.url = element.url + '/';
+          if (element.url.slice(-1) != "/") {
+            element.url = element.url + '/';
 
-        }
+          }
 
-        var repositoryDatasetListURL = element.url + "api/3/action/" + dataset_list_url;
+          var repositoryDatasetListURL = element.url + "api/3/action/" + dataset_list_url;
           
-        // console.log(repositoryDatasetListURL);
+          // console.log(repositoryDatasetListURL);
     
-        // request.get(dataset_list_url + "", {}, function (err, res) {
-        (function (element, repositoryDatasetListURL) {
+          // request.get(dataset_list_url + "", {}, function (err, res) {
+          (function (element, repositoryDatasetListURL) {
 
-          request.get(repositoryDatasetListURL, function (err, res) {
+            request.get(repositoryDatasetListURL, function (err, res) {
 
-            try {
+              try {
 
-              var datasets = JSON.parse((res.body)).result;
-              // console.log(JSON.stringify(res.body));
+                var datasets = JSON.parse((res.body)).result;
+                // console.log(JSON.stringify(res.body));
 
-              console.log("Fetching datasets from: " + res.request.uri.href);
+                console.log("Fetching datasets from: " + res.request.uri.href);
 
-              for (var i in datasets) {
-                var dataset = {
-                  repository: element.url + "api/3/action/",
-                  repositoryID: element.original,
-                  datasetID: datasets[i]
-                }
+                for (var i in datasets) {
+                  var dataset = {
+                    repository: element.url + "api/3/action/",
+                    repositoryID: element.original,
+                    datasetID: datasets[i]
+                  }
                  
-                // console.log("new resource added: "+resource.resource);
-                // console.log(dataset);
-                queue.push(dataset);
+                  // console.log("new resource added: "+resource.resource);
+                  // console.log(dataset);
+                  queue.push(dataset);
+                }
               }
-            }
-            catch (E) {
-              var Repository = mongoose.model('Repository');
-              Repository.update({ url: element.url }, { error: E }, function () {
-                console.log(E + " -> " + element.url);
-              });
-            }
+              catch (E) {
+                var Repository = mongoose.model('Repository');
+                Repository.update({ url: element.url }, { error: E }, function () {
+                  console.log(E + " -> " + element.url);
+                });
+              }
 
-          });
-        } (element, repositoryDatasetListURL));
-
+            });
+          } (element, repositoryDatasetListURL));
+        }
       })
 
 
@@ -91,19 +91,9 @@ router.get('/update', function (req, res, next) {
 
     console.log("All datasets were fetched! Saving formats to MongoDB...");
 
-    // for (var form in formats) {
-
-    //   var FormatModel = mongoose.model('Format');
-    //   var tt = new FormatModel({ name: form, repository: formats[form] });
-    //   tt.save();
-
-    // }
-
   };
 
-
-
-  res.send('Check LOGS!');
+  res.send('Please check logs in the console.');
 
 
 });
@@ -133,26 +123,13 @@ function saveDatasetAndResources(dataset, callback) {
 
       
       // array of resources
-      var resources = JSON.parse(r.body).result.resources;
-      
-      // (function(result){
-        
-      
-      // mongoose.model("DatasetDetail").find({name:JSON.parse(r.body).result.name}, function(err, docs){
-      //   if(docs == ""){
-      //       var DatasetDetail = mongoose.model("DatasetDetail");
-      //       var datasetDetail = new DatasetDetail(JSON.parse(r.body).result);
-      //       datasetDetail.save();
-      //   }
-      // })
-      // }(JSON.parse(r.body).result))
-      
+      var resources = JSON.parse(r.body).result.resources;    
      
 
       if (typeof resources == 'undefined')
         resources = JSON.parse(r.body).result[0].resources;
 
-        resources.forEach(function (res) {
+      resources.forEach(function (res) {
 
         res.repositoryID = dataset.repositoryID;
         res.repository = dataset.repository;
@@ -163,26 +140,6 @@ function saveDatasetAndResources(dataset, callback) {
 
         saveResource(res);
         
-        // find a new resource 
-        // (function (res1) {
-        //   mongoose.model("Resource").find({ url: res.url }, function (err, docs) {
-
-        //     if (docs == "") {
-
-        //       (function (res2) {
-
-        //         normalize(res2.format, function (f) {
-        //           res2.normalizedFormat = f;
-
-        //           var Resource = mongoose.model("Resource");
-        //           var resource = new Resource(res2);
-        //           resource.save();
-        //         })
-        //       } (res1))
-        //     }
-        //   })
-        // } (res)
-        //   );
       });
     }
     catch (E) {

@@ -7,6 +7,7 @@ var repositorySchema = new mongoose.Schema({
   url: { type: String, index: true },
   APIURL: { type: String, index: true },
   error: String,
+  active: Boolean,
 });
 
 mongoose.model('Repository', repositorySchema);
