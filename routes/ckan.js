@@ -106,12 +106,6 @@ function saveDatasetAndResources(dataset, callback) {
   console.log("Fetching resources from dataset: " + datasetURL);
   console.log("Repository: " + dataset.repository);
 
-
-<<<<<<< HEAD
-  console.log(sourceee);
-
-=======
->>>>>>> 6766a337dc9ac1de4267931a31261cdf7f468e1a
   // saving the dataset
   saveDataset({ datasetID: dataset.datasetID, repository: dataset.repository, repositoryID: dataset.repositoryID });  
 
@@ -139,11 +133,6 @@ function saveDatasetAndResources(dataset, callback) {
 
         console.log("Saving resource: " + res.name + " from dataset " + res.datasetID);
 
-<<<<<<< HEAD
-        sourceee++;
-
-=======
->>>>>>> 6766a337dc9ac1de4267931a31261cdf7f468e1a
         saveResource(res);
 
       });
@@ -183,12 +172,6 @@ function saveDataset(d) {
 
 function saveResource(res) {
   mongoose.model("Resource").find({ url: res.url }, function (err, docs) {
-<<<<<<< HEAD
-    sourceee--;
-
-
-=======
->>>>>>> 6766a337dc9ac1de4267931a31261cdf7f468e1a
     if (docs == "") {
 
       normalize(res.format, function (f) {
