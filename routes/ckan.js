@@ -12,7 +12,7 @@ var dataset_list_url = "package_list";
 var get_dataset_url = "package_show"
 
 // create a queue and set the max the amount of concurrent ajax request to 20
-var queue = async.queue(saveDatasetAndResources, 5);
+var queue = async.queue(saveDatasetAndResources, 10);
 
 
 /* GET resources. */
@@ -83,7 +83,7 @@ router.get('/update', function (req, res, next) {
 
 
 
-  }).skip(0).limit(91);
+  }).skip(0).limit(900);
 
 
   // after finish all ajax request, save all formats to a the Format collection
@@ -97,7 +97,7 @@ router.get('/update', function (req, res, next) {
 
 
 });
-
+var sourceee = 0;
 function saveDatasetAndResources(dataset, callback) {
   
   // get details of the dataset
@@ -105,13 +105,12 @@ function saveDatasetAndResources(dataset, callback) {
 
   console.log("Fetching resources from dataset: " + datasetURL);
   console.log("Repository: " + dataset.repository);
-  
+
+
+  console.log(sourceee);
+
   // saving the dataset
-  saveDataset({ datasetID: dataset.datasetID, repository: dataset.repository, repositoryID: dataset.repositoryID });
-  
-  // var Dataset = mongoose.model("Dataset");
-  // var dataset = new Dataset({ datasetID: dataset.datasetID, repository: dataset.repository });
-  // dataset.save();
+  saveDataset({ datasetID: dataset.datasetID, repository: dataset.repository, repositoryID: dataset.repositoryID });  
 
   // make the request to retrieve dataset and search for resources
   request.get(datasetURL, {}, function (e, r) {
@@ -123,8 +122,8 @@ function saveDatasetAndResources(dataset, callback) {
 
       
       // array of resources
-      var resources = JSON.parse(r.body).result.resources;    
-     
+      var resources = JSON.parse(r.body).result.resources;
+
 
       if (typeof resources == 'undefined')
         resources = JSON.parse(r.body).result[0].resources;
@@ -137,13 +136,15 @@ function saveDatasetAndResources(dataset, callback) {
 
         console.log("Saving resource: " + res.name + " from dataset " + res.datasetID);
 
+        sourceee++;
 
         saveResource(res);
-        
+
       });
     }
     catch (E) {
       console.log(E);
+
     }
 
     callback();
@@ -176,6 +177,8 @@ function saveDataset(d) {
 
 function saveResource(res) {
   mongoose.model("Resource").find({ url: res.url }, function (err, docs) {
+    sourceee--;
+
 
     if (docs == "") {
 
