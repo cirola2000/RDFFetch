@@ -12,7 +12,7 @@ var dataset_list_url = "package_list";
 var get_dataset_url = "package_show"
 
 // create a queue and set the max the amount of concurrent ajax request to 20
-var queue = async.queue(saveDatasetAndResources, 10);
+var queue = async.queue(saveDatasetAndResources, 20);
 
 
 /* GET resources. */
@@ -107,8 +107,11 @@ function saveDatasetAndResources(dataset, callback) {
   console.log("Repository: " + dataset.repository);
 
 
+<<<<<<< HEAD
   console.log(sourceee);
 
+=======
+>>>>>>> 6766a337dc9ac1de4267931a31261cdf7f468e1a
   // saving the dataset
   saveDataset({ datasetID: dataset.datasetID, repository: dataset.repository, repositoryID: dataset.repositoryID });  
 
@@ -136,8 +139,11 @@ function saveDatasetAndResources(dataset, callback) {
 
         console.log("Saving resource: " + res.name + " from dataset " + res.datasetID);
 
+<<<<<<< HEAD
         sourceee++;
 
+=======
+>>>>>>> 6766a337dc9ac1de4267931a31261cdf7f468e1a
         saveResource(res);
 
       });
@@ -177,9 +183,12 @@ function saveDataset(d) {
 
 function saveResource(res) {
   mongoose.model("Resource").find({ url: res.url }, function (err, docs) {
+<<<<<<< HEAD
     sourceee--;
 
 
+=======
+>>>>>>> 6766a337dc9ac1de4267931a31261cdf7f468e1a
     if (docs == "") {
 
       normalize(res.format, function (f) {
