@@ -12,11 +12,22 @@ var dataset_list_url = "package_list";
 var get_dataset_url = "package_show"
 
 // create a queue and set the max the amount of concurrent ajax request to 20
-var queue = async.queue(saveDatasetAndResources, 20);
+var queue = async.queue(saveDatasetAndResources, 1);
 
 
 /* GET resources. */
 router.get('/update', function (req, res, next) {
+
+  // var dataset = {
+  //   repository: "http://datahub.io/api/3/action/",
+  //   repositoryID: "http://datahub.io/",
+  //   datasetID: "imf-weo"
+  //   // datasetID: datasets[i]
+  // }
+                 
+  // // console.log("new resource added: "+resource.resource);
+  // // console.log(dataset);
+  // queue.push(dataset);
 
   var RepositoryModel = mongoose.model('Repository');
 
@@ -177,9 +188,16 @@ function saveResource(res) {
       normalize(res.format, function (f) {
         res.normalizedFormat = f;
 
-        var Resource = mongoose.model("Resource");
-        var resource = new Resource(res);
-        resource.save();
+        console.log(res);
+
+        try {
+          var Resource = mongoose.model("Resource");
+          var resource = new Resource(res);
+          resource.save();
+        }
+        catch (e) {
+          console.log("Oooops: MongoDB error: " + e);
+        }
       })
 
     }
